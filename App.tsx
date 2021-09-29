@@ -1,21 +1,40 @@
-import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { Fragment } from "react";
+import { StatusBar } from "react-native";
+import { useFonts } from "expo-font"; // expo install aqui
+import { Inter_500Medium, Inter_400Regular } from "@expo-google-fonts/inter";
+import { Rajdhani_500Medium, Rajdhani_700Bold } from "@expo-google-fonts/rajdhani";
+import AppLoading from "expo-app-loading";
+
+import { AuthProvider } from './src/hooks/auth';
+
+import { Background } from "./src/components/Background";
+import { Routes } from "./src/routes";
 
 export default function App() {
+  // importando fontes. retorna boolean de error
+  const [fontsLoaded] = useFonts({
+    // hook para carregamento das fontes?
+    Inter_400Regular,
+    Inter_500Medium,
+    Rajdhani_500Medium,
+    Rajdhani_700Bold,
+  });
+
+  // verifica carregamento das fontes
+  if (!fontsLoaded) {
+    return <AppLoading />; // componente que segura tela de splash
+  }
+
   return (
-    <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <Background>
+      <StatusBar
+        barStyle="light-content"
+        backgroundColor="transparent"
+        translucent
+      />
+      <AuthProvider>
+        <Routes />
+      </AuthProvider>
+    </Background>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
